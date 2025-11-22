@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Badge = ({ 
-  children, 
+const Badge = ({
+  children,
   variant = 'default',
   size = 'md',
   className = '',
@@ -33,15 +33,14 @@ const Badge = ({
       `}
     >
       {dot && (
-        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-          variant === 'default' ? 'bg-gray-500' :
-          variant === 'primary' ? 'bg-blue-500' :
-          variant === 'success' ? 'bg-green-500' :
-          variant === 'danger' ? 'bg-red-500' :
-          variant === 'warning' ? 'bg-yellow-500' :
-          variant === 'info' ? 'bg-cyan-500' :
-          'bg-purple-500'
-        }`} />
+        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${variant === 'default' ? 'bg-gray-500' :
+            variant === 'primary' ? 'bg-blue-500' :
+              variant === 'success' ? 'bg-green-500' :
+                variant === 'danger' ? 'bg-red-500' :
+                  variant === 'warning' ? 'bg-yellow-500' :
+                    variant === 'info' ? 'bg-cyan-500' :
+                      'bg-purple-500'
+          }`} />
       )}
       {children}
     </span>
