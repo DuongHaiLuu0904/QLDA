@@ -77,6 +77,12 @@ const CandidateSettingsPage = () => {
     const handlePasswordChange = (e) => {
         e.preventDefault();
 
+        // Validate current password (in real app, this would check against stored password)
+        if (!passwordData.currentPassword) {
+            alert('Vui lòng nhập mật khẩu hiện tại!');
+            return;
+        }
+
         if (passwordData.newPassword !== passwordData.confirmPassword) {
             alert('Mật khẩu mới không khớp!');
             return;
@@ -87,8 +93,24 @@ const CandidateSettingsPage = () => {
             return;
         }
 
-        // Simulate password change
-        alert('Đổi mật khẩu thành công!');
+        if (passwordData.newPassword === passwordData.currentPassword) {
+            alert('Mật khẩu mới phải khác mật khẩu hiện tại!');
+            return;
+        }
+
+        // Check password strength
+        const hasUpperCase = /[A-Z]/.test(passwordData.newPassword);
+        const hasLowerCase = /[a-z]/.test(passwordData.newPassword);
+        const hasNumber = /\d/.test(passwordData.newPassword);
+        
+        if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+            if (!confirm('Mật khẩu nên chứa chữ hoa, chữ thường và số để bảo mật tốt hơn. Bạn có muốn tiếp tục?')) {
+                return;
+            }
+        }
+
+        // In real app, would call API to update password
+        alert('Đổi mật khẩu thành công! Vui lòng đăng nhập lại với mật khẩu mới.');
         setPasswordData({
             currentPassword: '',
             newPassword: '',

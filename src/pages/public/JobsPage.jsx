@@ -1,14 +1,18 @@
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { Search, MapPin, Briefcase, Filter, X, DollarSign, Clock } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Search, MapPin, Briefcase, Filter, X, DollarSign, Clock, Bookmark, BookmarkCheck } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+import { useAuth } from '../../context/AuthContext';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
+import Modal from '../../components/common/Modal';
 
 const JobsPage = () => {
+    const [searchParams] = useSearchParams();
     const { jobs, categories, locations } = useData();
+    const { user } = useAuth();
     const [searchTerm, setSearchTerm] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
@@ -16,6 +20,37 @@ const JobsPage = () => {
     const [workTypeFilter, setWorkTypeFilter] = useState('');
     const [salaryRange, setSalaryRange] = useState('all');
     const [showFilters, setShowFilters] = useState(false);
+    const [savedSearches, setSavedSearches] = useState(() => {
+        const saved = localStorage.getItem('savedSearches');
+        return saved ? JSON.parse(saved) : [];
+    });
+    const [showSaveModal, setShowSaveModal] = useState(false);
+    const [searchName, setSearchName] = useState('');
+    const [companySizeFilter, setCompanySizeFilter] = useState('');
+    const [benefitsFilter, setBenefitsFilter] = useState([]);
+    const [postedDateFilter, setPostedDateFilter] = useState('all');
+    const [skillsFilter, setSkillsFilter] = useState([]);
+
+    const allSkills = useMemo(() => {
+        const skills = new Set();
+        jobs.forEach(job => {
+            job.skills.forEach(skill => skills.add(skill));
+        });
+        return Array.from(skills).sort();
+    }, [jobs]);
+
+    const allBenefits = ['Bảo hiểm', 'Du lịch', 'Thưởng', 'Đào tạo', 'Laptop', 'Xe đưa đón'];
+
+    // Initialize filters from URL params
+    useEffect(() => {
+        const search = searchParams.get('search');
+        const location = searchParams.get('location');
+        const category = searchParams.get('category');
+        
+        if (search) setSearchTerm(search);
+        if (location) setLocationFilter(location);
+        if (category) setCategoryFilter(category);
+    }, [searchParams]);
 
     // Filter jobs
     const filteredJobs = useMemo(() => {
@@ -59,10 +94,45 @@ const JobsPage = () => {
                 }
             }
 
+            // Company size filter
+            const matchesCompanySize = companySizeFilter === '' || job.companySize === companySizeFilter;
+
+            // Benefits filter
+            const matchesBenefits = benefitsFilter.length === 0 || 
+                benefitsFilter.every(benefit => job.benefits?.includes(benefit));
+
+            // Posted date filter
+            let matchesPostedDate = true;
+            if (postedDateFilter !== 'all') {
+                const postedDate = new Date(job.postedDate);
+                const now = new Date();
+                const diffDays = Math.floor((now - postedDate) / (1000 * 60 * 60 * 24));
+                
+                switch (postedDateFilter) {
+                    case '24h':
+                        matchesPostedDate = diffDays <= 1;
+                        break;
+                    case '7d':
+                        matchesPostedDate = diffDays <= 7;
+                        break;
+                    case '30d':
+                        matchesPostedDate = diffDays <= 30;
+                        break;
+                    default:
+                        matchesPostedDate = true;
+                }
+            }
+
+            // Skills filter
+            const matchesSkills = skillsFilter.length === 0 ||
+                skillsFilter.some(skill => job.skills.includes(skill));
+
             return matchesSearch && matchesLocation && matchesCategory &&
-                matchesLevel && matchesWorkType && matchesSalary;
+                matchesLevel && matchesWorkType && matchesSalary &&
+                matchesCompanySize && matchesBenefits && matchesPostedDate && matchesSkills;
         });
-    }, [jobs, searchTerm, locationFilter, categoryFilter, levelFilter, workTypeFilter, salaryRange]);
+    }, [jobs, searchTerm, locationFilter, categoryFilter, levelFilter, workTypeFilter, salaryRange, 
+        companySizeFilter, benefitsFilter, postedDateFilter, skillsFilter]);
 
     const clearFilters = () => {
         setSearchTerm('');
@@ -71,6 +141,10 @@ const JobsPage = () => {
         setLevelFilter('');
         setWorkTypeFilter('');
         setSalaryRange('all');
+        setCompanySizeFilter('');
+        setBenefitsFilter([]);
+        setPostedDateFilter('all');
+        setSkillsFilter([]);
     };
 
     const activeFiltersCount = [
@@ -79,8 +153,72 @@ const JobsPage = () => {
         categoryFilter,
         levelFilter,
         workTypeFilter,
-        salaryRange !== 'all' ? salaryRange : ''
-    ].filter(f => f !== '').length;
+        salaryRange !== 'all' ? salaryRange : '',
+        companySizeFilter,
+        postedDateFilter !== 'all' ? postedDateFilter : ''
+    ].filter(f => f !== '').length + benefitsFilter.length + skillsFilter.length;
+
+    const saveCurrentSearch = () => {
+        if (!user) {
+            alert('Vui lòng đăng nhập để lưu tìm kiếm');
+            return;
+        }
+        if (activeFiltersCount === 0) {
+            alert('Vui lòng thiết lập ít nhất 1 điều kiện tìm kiếm');
+            return;
+        }
+        setShowSaveModal(true);
+    };
+
+    const confirmSaveSearch = () => {
+        if (!searchName.trim()) {
+            alert('Vui lòng nhập tên cho tìm kiếm này');
+            return;
+        }
+
+        const newSearch = {
+            id: Date.now(),
+            name: searchName,
+            userId: user.id,
+            filters: {
+                searchTerm,
+                locationFilter,
+                categoryFilter,
+                levelFilter,
+                workTypeFilter,
+                salaryRange
+            },
+            createdAt: new Date().toISOString(),
+            resultsCount: filteredJobs.length
+        };
+
+        const updated = [...savedSearches, newSearch];
+        setSavedSearches(updated);
+        localStorage.setItem('savedSearches', JSON.stringify(updated));
+        setShowSaveModal(false);
+        setSearchName('');
+        alert('Đã lưu tìm kiếm thành công!');
+    };
+
+    const loadSavedSearch = (search) => {
+        setSearchTerm(search.filters.searchTerm);
+        setLocationFilter(search.filters.locationFilter);
+        setCategoryFilter(search.filters.categoryFilter);
+        setLevelFilter(search.filters.levelFilter);
+        setWorkTypeFilter(search.filters.workTypeFilter);
+        setSalaryRange(search.filters.salaryRange);
+        setShowFilters(true);
+    };
+
+    const deleteSavedSearch = (id) => {
+        if (confirm('Bạn có chắc muốn xóa tìm kiếm này?')) {
+            const updated = savedSearches.filter(s => s.id !== id);
+            setSavedSearches(updated);
+            localStorage.setItem('savedSearches', JSON.stringify(updated));
+        }
+    };
+
+    const userSavedSearches = savedSearches.filter(s => s.userId === user?.id);
 
     return (
         <div className="min-h-screen bg-gray-50 py-8">
@@ -94,6 +232,33 @@ const JobsPage = () => {
                         Tìm thấy {filteredJobs.length} việc làm phù hợp
                     </p>
                 </div>
+
+                {/* Saved Searches */}
+                {user && userSavedSearches.length > 0 && (
+                    <Card padding="md" className="mb-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="font-semibold text-gray-900">🔖 Tìm kiếm đã lưu</h3>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {userSavedSearches.map(search => (
+                                <div key={search.id} className="flex items-center gap-2 bg-blue-50 px-3 py-2 rounded-lg">
+                                    <button
+                                        onClick={() => loadSavedSearch(search)}
+                                        className="text-sm text-blue-700 hover:text-blue-900 font-medium"
+                                    >
+                                        {search.name} ({search.resultsCount})
+                                    </button>
+                                    <button
+                                        onClick={() => deleteSavedSearch(search.id)}
+                                        className="text-gray-400 hover:text-red-600"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
+                )}
 
                 {/* Search Bar */}
                 <div className="bg-white rounded-lg shadow-md p-4 mb-6">
@@ -204,6 +369,89 @@ const JobsPage = () => {
                                         <option value="over30">Trên 30 triệu</option>
                                     </select>
                                 </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Quy mô công ty
+                                    </label>
+                                    <select
+                                        value={companySizeFilter}
+                                        onChange={(e) => setCompanySizeFilter(e.target.value)}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="">Tất cả</option>
+                                        <option value="1-50">1-50 nhân viên</option>
+                                        <option value="51-200">51-200 nhân viên</option>
+                                        <option value="201-500">201-500 nhân viên</option>
+                                        <option value="500+">500+ nhân viên</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Ngày đăng
+                                    </label>
+                                    <select
+                                        value={postedDateFilter}
+                                        onChange={(e) => setPostedDateFilter(e.target.value)}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="all">Tất cả</option>
+                                        <option value="24h">24 giờ qua</option>
+                                        <option value="7d">7 ngày qua</option>
+                                        <option value="30d">30 ngày qua</option>
+                                    </select>
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Kỹ năng (chọn nhiều)
+                                    </label>
+                                    <div className="flex flex-wrap gap-2 p-3 border border-gray-300 rounded-lg max-h-32 overflow-y-auto">
+                                        {allSkills.map(skill => (
+                                            <label key={skill} className="inline-flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={skillsFilter.includes(skill)}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setSkillsFilter([...skillsFilter, skill]);
+                                                        } else {
+                                                            setSkillsFilter(skillsFilter.filter(s => s !== skill));
+                                                        }
+                                                    }}
+                                                    className="mr-1"
+                                                />
+                                                <span className="text-sm">{skill}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Phúc lợi (chọn nhiều)
+                                    </label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {allBenefits.map(benefit => (
+                                            <label key={benefit} className="inline-flex items-center bg-gray-50 px-3 py-2 rounded-lg">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={benefitsFilter.includes(benefit)}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setBenefitsFilter([...benefitsFilter, benefit]);
+                                                        } else {
+                                                            setBenefitsFilter(benefitsFilter.filter(b => b !== benefit));
+                                                        }
+                                                    }}
+                                                    className="mr-2"
+                                                />
+                                                <span className="text-sm">{benefit}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
 
                             {activeFiltersCount > 0 && (
@@ -211,15 +459,71 @@ const JobsPage = () => {
                                     <p className="text-sm text-gray-600">
                                         Đang áp dụng {activeFiltersCount} bộ lọc
                                     </p>
-                                    <Button variant="ghost" size="sm" onClick={clearFilters}>
-                                        <X className="w-4 h-4 mr-1" />
-                                        Xóa bộ lọc
-                                    </Button>
+                                    <div className="flex gap-2">
+                                        {user && (
+                                            <Button variant="outline" size="sm" onClick={saveCurrentSearch}>
+                                                <Bookmark className="w-4 h-4 mr-1" />
+                                                Lưu tìm kiếm
+                                            </Button>
+                                        )}
+                                        <Button variant="ghost" size="sm" onClick={clearFilters}>
+                                            <X className="w-4 h-4 mr-1" />
+                                            Xóa bộ lọc
+                                        </Button>
+                                    </div>
                                 </div>
                             )}
                         </div>
                     )}
                 </div>
+
+                {/* Save Search Modal */}
+                <Modal
+                    isOpen={showSaveModal}
+                    onClose={() => {
+                        setShowSaveModal(false);
+                        setSearchName('');
+                    }}
+                    title="Lưu tìm kiếm"
+                >
+                    <div className="space-y-4">
+                        <p className="text-sm text-gray-600">
+                            Đặt tên cho tìm kiếm này để dễ dàng sử dụng lại sau
+                        </p>
+                        <Input
+                            label="Tên tìm kiếm"
+                            value={searchName}
+                            onChange={(e) => setSearchName(e.target.value)}
+                            placeholder="VD: Frontend Developer Hà Nội"
+                            autoFocus
+                        />
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                            <p className="text-xs text-gray-500 mb-2">Điều kiện:</p>
+                            <div className="flex flex-wrap gap-2">
+                                {searchTerm && <Badge variant="primary">{searchTerm}</Badge>}
+                                {locationFilter && <Badge variant="success">{locationFilter}</Badge>}
+                                {categoryFilter && <Badge variant="info">{categoryFilter}</Badge>}
+                                {levelFilter && <Badge variant="warning">{levelFilter}</Badge>}
+                                {workTypeFilter && <Badge variant="default">{workTypeFilter}</Badge>}
+                            </div>
+                        </div>
+                        <div className="flex gap-2 justify-end">
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    setShowSaveModal(false);
+                                    setSearchName('');
+                                }}
+                            >
+                                Hủy
+                            </Button>
+                            <Button onClick={confirmSaveSearch}>
+                                <BookmarkCheck className="w-4 h-4 mr-2" />
+                                Lưu
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
 
                 {/* Jobs List */}
                 <div className="space-y-4">

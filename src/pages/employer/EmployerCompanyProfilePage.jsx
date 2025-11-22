@@ -66,32 +66,42 @@ const EmployerCompanyProfilePage = () => {
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                alert('Kích thước logo không được vượt quá 5MB');
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                alert('Vui lòng chọn file ảnh');
+                return;
+            }
             setUploadingLogo(true);
-            // Simulate upload
-            setTimeout(() => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setFormData({ ...formData, logo: reader.result });
-                    setUploadingLogo(false);
-                };
-                reader.readAsDataURL(file);
-            }, 1000);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData({ ...formData, logo: reader.result });
+                setUploadingLogo(false);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
     const handleBannerUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                alert('Kích thước banner không được vượt quá 10MB');
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                alert('Vui lòng chọn file ảnh');
+                return;
+            }
             setUploadingBanner(true);
-            // Simulate upload
-            setTimeout(() => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setFormData({ ...formData, banner: reader.result });
-                    setUploadingBanner(false);
-                };
-                reader.readAsDataURL(file);
-            }, 1000);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData({ ...formData, banner: reader.result });
+                setUploadingBanner(false);
+            };
+            reader.readAsDataURL(file);
         }
     };
 

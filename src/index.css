@@ -11,15 +11,15 @@
 
 @layer components {
     .container {
-        @apply max-w-7xl mx-auto px-4 sm: px-6 lg:px-8;
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
     }
 
     .btn-primary {
-        @apply bg-primary-600 text-white px-4 py-2 rounded-lg hover: bg-primary-700 transition-colors font-medium;
+        @apply bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium;
     }
 
     .btn-secondary {
-        @apply bg-white text-gray-700 px-4 py-2 rounded-lg border border-gray-300 hover: bg-gray-50 transition-colors font-medium;
+        @apply bg-white text-gray-700 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors font-medium;
     }
 
     .card {
@@ -28,5 +28,41 @@
 
     .input {
         @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    }
+}
+
+@layer utilities {
+    /* Screen reader only - for accessibility */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+
+    .not-sr-only {
+        position: static;
+        width: auto;
+        height: auto;
+        padding: 0;
+        margin: 0;
+        overflow: visible;
+        clip: auto;
+        white-space: normal;
+    }
+
+    /* Focus visible for better keyboard navigation */
+    .focus-visible-ring {
+        @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+    }
+
+    /* Touch target size for mobile (min 44x44px) */
+    .touch-target {
+        @apply min-h-[44px] min-w-[44px];
     }
 }

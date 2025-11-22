@@ -7,13 +7,14 @@ import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Table from '../../components/common/Table';
 import Button from '../../components/common/Button';
-import { Eye, Mail, Phone, Download, CheckCircle, XCircle, Clock, ArrowLeft } from 'lucide-react';
+import { Eye, Mail, Phone, Download, CheckCircle, XCircle, Clock, ArrowLeft, Star } from 'lucide-react';
 
 const EmployerApplicantsPage = () => {
     const { jobId } = useParams();
     const { user } = useAuth();
     const { jobs, applications, updateApplicationStatus } = useData();
     const [statusFilter, setStatusFilter] = useState('all');
+    const [shortlistedIds, setShortlistedIds] = useState([]);
 
     const job = jobs.find(j => j.id === parseInt(jobId) && j.employerId === user?.id);
 
@@ -44,6 +45,18 @@ const EmployerApplicantsPage = () => {
 
     const handleStatusChange = (applicationId, newStatus) => {
         updateApplicationStatus(applicationId, newStatus);
+    };
+
+    const toggleShortlist = (applicationId) => {
+        setShortlistedIds(prev => 
+            prev.includes(applicationId) 
+                ? prev.filter(id => id !== applicationId)
+                : [...prev, applicationId]
+        );
+    };
+
+    const isShortlisted = (applicationId) => {
+        return shortlistedIds.includes(applicationId);
     };
 
     const statusColors = {
@@ -132,13 +145,26 @@ const EmployerApplicantsPage = () => {
         {
             header: '',
             accessor: 'id',
-            cell: (_, row) => (
-                <button
-                    onClick={() => alert('Xem chi tiết hồ sơ:\n' + JSON.stringify(row.candidate, null, 2))}
-                    className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-                >
-                    Xem hồ sơ
-                </button>
+            cell: (appId, row) => (
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => toggleShortlist(appId)}
+                        className={`p-2 rounded-lg transition-colors ${
+                            isShortlisted(appId) 
+                                ? 'text-yellow-600 bg-yellow-50 hover:bg-yellow-100' 
+                                : 'text-gray-400 hover:text-yellow-600 hover:bg-yellow-50'
+                        }`}
+                        title={isShortlisted(appId) ? 'Bỏ ưu tiên' : 'Đánh dấu ưu tiên'}
+                    >
+                        <Star className={`w-5 h-5 ${isShortlisted(appId) ? 'fill-current' : ''}`} />
+                    </button>
+                    <button
+                        onClick={() => alert('Xem chi tiết hồ sơ:\n' + JSON.stringify(row.candidate, null, 2))}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                    >
+                        Xem hồ sơ
+                    </button>
+                </div>
             )
         }
     ];

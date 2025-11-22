@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
+import { SkipToMain } from '../utils/accessibility.jsx';
 
 const MainLayout = ({ children }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -43,6 +44,7 @@ const MainLayout = ({ children }) => {
 
     return (
         <div className="min-h-screen bg-gray-50">
+            <SkipToMain />
             {/* Header */}
             <header className="bg-white shadow-sm sticky top-0 z-40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -272,7 +274,7 @@ const MainLayout = ({ children }) => {
             </header>
 
             {/* Main Content */}
-            <main>{children}</main>
+            <main id="main-content" tabIndex="-1">{children}</main>
 
             {/* Footer */}
             <footer className="bg-gray-900 text-white mt-auto">

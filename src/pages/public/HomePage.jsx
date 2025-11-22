@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Briefcase, TrendingUp, Users, Building2, ArrowRight } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
@@ -7,8 +7,19 @@ import Badge from '../../components/common/Badge';
 import { useData } from '../../context/DataContext';
 
 const HomePage = () => {
+    const navigate = useNavigate();
     const { jobs, categories, locations } = useData();
     const featuredJobs = jobs.filter(j => j.featured).slice(0, 6);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [searchLocation, setSearchLocation] = useState('');
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const params = new URLSearchParams();
+        if (searchKeyword) params.set('search', searchKeyword);
+        if (searchLocation) params.set('location', searchLocation);
+        navigate(`/jobs?${params.toString()}`);
+    };
 
     return (
         <div className="min-h-screen">
@@ -24,28 +35,37 @@ const HomePage = () => {
                         </p>
 
                         {/* Search Bar */}
-                        <div className="bg-white rounded-lg shadow-xl p-2 flex flex-col md:flex-row gap-2">
+                        <form onSubmit={handleSearch} className="bg-white rounded-lg shadow-xl p-2 flex flex-col md:flex-row gap-2">
                             <div className="flex-1 flex items-center px-4 border-b md:border-b-0 md:border-r border-gray-200">
                                 <Search className="w-5 h-5 text-gray-400 mr-2" />
                                 <input
                                     type="text"
                                     placeholder="Vị trí, công ty, kỹ năng..."
                                     className="flex-1 py-3 text-gray-900 focus:outline-none"
+                                    value={searchKeyword}
+                                    onChange={(e) => setSearchKeyword(e.target.value)}
                                 />
                             </div>
                             <div className="flex-1 flex items-center px-4">
                                 <MapPin className="w-5 h-5 text-gray-400 mr-2" />
-                                <input
-                                    type="text"
-                                    placeholder="Địa điểm"
-                                    className="flex-1 py-3 text-gray-900 focus:outline-none"
-                                />
+                                <select
+                                    className="flex-1 py-3 text-gray-900 focus:outline-none bg-transparent"
+                                    value={searchLocation}
+                                    onChange={(e) => setSearchLocation(e.target.value)}
+                                >
+                                    <option value="">Tất cả địa điểm</option>
+                                    {locations.map((location) => (
+                                        <option key={location.id} value={location.name}>
+                                            {location.name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
-                            <Button size="lg" className="md:w-auto">
+                            <Button type="submit" size="lg" className="md:w-auto">
                                 <Search className="w-5 h-5 mr-2" />
                                 Tìm kiếm
                             </Button>
-                        </div>
+                        </form>
                     </div>
 
                     {/* Stats */}

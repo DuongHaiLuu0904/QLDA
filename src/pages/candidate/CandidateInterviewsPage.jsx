@@ -8,7 +8,7 @@ import Button from '../../components/common/Button';
 import {
     Calendar, Clock, Video, MapPin, Briefcase, User,
     CheckCircle, XCircle, AlertCircle, Phone, Mail,
-    ChevronLeft, ChevronRight, Filter
+    ChevronLeft, ChevronRight, Filter, Download, Bell, CalendarPlus
 } from 'lucide-react';
 
 const CandidateInterviewsPage = () => {
@@ -99,6 +99,126 @@ const CandidateInterviewsPage = () => {
                 return MapPin;
             default:
                 return Calendar;
+        }
+    };
+
+    const exportToICS = (interview) => {
+        const formatDate = (dateStr, time) => {
+            const date = new Date(dateStr);
+            const [hours, minutes] = time.split(':');
+            date.setHours(parseInt(hours), parseInt(minutes), 0);
+            
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hour = String(date.getHours()).padStart(2, '0');
+            const minute = String(date.getMinutes()).padStart(2, '0');
+            
+            return `${year}${month}${day}T${hour}${minute}00`;
+        };
+
+        const startDate = formatDate(interview.date, interview.time);
+        
+        // End time is 1 hour later
+        const endDateTime = new Date(interview.date);
+        const [hours, minutes] = interview.time.split(':');
+        endDateTime.setHours(parseInt(hours) + 1, parseInt(minutes), 0);
+        const endDate = formatDate(interview.date, `${endDateTime.getHours()}:${endDateTime.getMinutes()}`);
+
+        const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//JobPortal//Interview Calendar//EN
+BEGIN:VEVENT
+UID:interview-${interview.id}@jobportal.com
+DTSTAMP:${formatDate(new Date().toISOString().split('T')[0], '00:00')}
+DTSTART:${startDate}
+DTEND:${endDate}
+SUMMARY:Phỏng vấn ${interview.jobTitle} - ${interview.company}
+DESCRIPTION:Vị trí: ${interview.jobTitle}\\nCông ty: ${interview.company}\\nNgười phỏng vấn: ${interview.interviewer}\\nLoại: ${interview.type === 'video' ? 'Trực tuyến' : interview.type === 'phone' ? 'Điện thoại' : 'Tại văn phòng'}${interview.meetingLink ? `\\nLink: ${interview.meetingLink}` : ''}${interview.notes ? `\\nGhi chú: ${interview.notes}` : ''}
+LOCATION:${interview.location}
+STATUS:CONFIRMED
+BEGIN:VALARM
+TRIGGER:-PT1H
+ACTION:DISPLAY
+DESCRIPTION:Nhắc nhở: Phỏng vấn ${interview.jobTitle} sau 1 giờ nữa
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT24H
+ACTION:DISPLAY
+DESCRIPTION:Nhắc nhở: Phỏng vấn ${interview.jobTitle} vào ngày mai
+END:VALARM
+END:VEVENT
+END:VCALENDAR`;
+
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `interview_${interview.company.replace(/\s/g, '_')}_${interview.date}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        alert('Đã tải xuống file .ics! Bạn có thể mở file này để thêm vào Google Calendar, Outlook, hoặc Apple Calendar.');
+    };
+
+    const addToGoogleCalendar = (interview) => {
+        const startDate = new Date(interview.date);
+        const [hours, minutes] = interview.time.split(':');
+        startDate.setHours(parseInt(hours), parseInt(minutes), 0);
+        
+        const endDate = new Date(startDate);
+        endDate.setHours(endDate.getHours() + 1);
+        
+        const formatGoogleDate = (date) => {
+            return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        };
+        
+        const details = `Vị trí: ${interview.jobTitle}
+Công ty: ${interview.company}
+Người phỏng vấn: ${interview.interviewer}
+Loại: ${interview.type === 'video' ? 'Trực tuyến' : interview.type === 'phone' ? 'Điện thoại' : 'Tại văn phòng'}
+${interview.meetingLink ? `Link: ${interview.meetingLink}` : ''}
+${interview.notes ? `Ghi chú: ${interview.notes}` : ''}`;
+        
+        const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Phỏng vấn ${interview.jobTitle} - ${interview.company}`)}&dates=${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(interview.location)}`;
+        
+        window.open(googleCalendarUrl, '_blank');
+    };
+
+    const setReminder = (interview) => {
+        if ('Notification' in window) {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    const interviewDate = new Date(interview.date);
+                    const [hours, minutes] = interview.time.split(':');
+                    interviewDate.setHours(parseInt(hours), parseInt(minutes), 0);
+                    
+                    const now = new Date();
+                    const timeDiff = interviewDate - now;
+                    
+                    if (timeDiff > 0) {
+                        // Set reminder 1 hour before
+                        const reminderTime = timeDiff - (60 * 60 * 1000);
+                        if (reminderTime > 0) {
+                            setTimeout(() => {
+                                new Notification('Nhắc nhở phỏng vấn', {
+                                    body: `Phỏng vấn ${interview.jobTitle} tại ${interview.company} sau 1 giờ nữa`,
+                                    icon: interview.companyLogo
+                                });
+                            }, reminderTime);
+                        }
+                        alert('Đã đặt nhắc nhở! Bạn sẽ nhận thông báo 1 giờ trước buổi phỏng vấn.');
+                    } else {
+                        alert('Không thể đặt nhắc nhở cho lịch phỏng vấn đã qua.');
+                    }
+                } else {
+                    alert('Vui lòng cho phép thông báo để sử dụng tính năng nhắc nhở.');
+                }
+            });
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ thông báo.');
         }
     };
 
@@ -282,9 +402,34 @@ const CandidateInterviewsPage = () => {
                                                 <Video className="h-4 w-4 mr-2" />
                                                 Tham gia phỏng vấn
                                             </Button>
-                                            <Button variant="outline">
-                                                <Calendar className="h-4 w-4 mr-2" />
-                                                Thêm vào lịch
+                                            <Button 
+                                                variant="outline"
+                                                onClick={() => addToGoogleCalendar(interview)}
+                                                title="Thêm vào Google Calendar"
+                                            >
+                                                <CalendarPlus className="h-4 w-4 mr-2" />
+                                                Google Calendar
+                                            </Button>
+                                        </div>
+                                    )}
+
+                                    {isUpcoming && (
+                                        <div className="flex gap-2 pt-4 border-t mt-4">
+                                            <Button 
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => exportToICS(interview)}
+                                            >
+                                                <Download className="h-4 w-4 mr-2" />
+                                                Tải .ics
+                                            </Button>
+                                            <Button 
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => setReminder(interview)}
+                                            >
+                                                <Bell className="h-4 w-4 mr-2" />
+                                                Đặt nhắc nhở
                                             </Button>
                                         </div>
                                     )}

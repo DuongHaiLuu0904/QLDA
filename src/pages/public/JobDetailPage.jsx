@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
     MapPin, DollarSign, Clock, Users, Briefcase, Calendar,
     Building2, Share2, Bookmark, BookmarkCheck, Send, ArrowLeft,
-    CheckCircle
+    CheckCircle, Flag, AlertTriangle
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
@@ -18,8 +18,13 @@ const JobDetailPage = () => {
     const { user } = useAuth();
     const { jobs, savedJobs, toggleSaveJob, applyJob } = useData();
     const [showApplyModal, setShowApplyModal] = useState(false);
+    const [showReportModal, setShowReportModal] = useState(false);
     const [coverLetter, setCoverLetter] = useState('');
     const [applySuccess, setApplySuccess] = useState(false);
+    const [reportData, setReportData] = useState({
+        reason: '',
+        description: ''
+    });
 
     const job = jobs.find(j => j.id === parseInt(id));
     const isSaved = savedJobs.some(s => s.jobId === parseInt(id) && s.candidateId === user?.id);
@@ -72,6 +77,22 @@ const JobDetailPage = () => {
         setShowApplyModal(false);
         setApplySuccess(true);
         setTimeout(() => setApplySuccess(false), 3000);
+    };
+
+    const handleReport = () => {
+        setShowReportModal(true);
+    };
+
+    const submitReport = () => {
+        if (!reportData.reason) {
+            alert('Vui lòng chọn lý do báo cáo');
+            return;
+        }
+        // In real app, would send to backend
+        console.log('Report submitted:', { jobId: job.id, ...reportData });
+        alert('Báo cáo của bạn đã được gửi. Chúng tôi sẽ xem xét trong 24h.');
+        setShowReportModal(false);
+        setReportData({ reason: '', description: '' });
     };
 
     const relatedJobs = jobs
@@ -278,6 +299,13 @@ const JobDetailPage = () => {
                                         <Share2 className="w-5 h-5 mr-2" />
                                         Chia sẻ
                                     </Button>
+                                    <button
+                                        onClick={handleReport}
+                                        className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                                    >
+                                        <Flag className="w-4 h-4" />
+                                        Báo cáo tin vi phạm
+                                    </button>
                                 </div>
                             </Card>
 
@@ -384,6 +412,76 @@ const JobDetailPage = () => {
                         >
                             <Send className="w-5 h-5 mr-2" />
                             Gửi hồ sơ
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Report Modal */}
+            <Modal
+                isOpen={showReportModal}
+                onClose={() => setShowReportModal(false)}
+                title="Báo cáo tin vi phạm"
+            >
+                <div className="space-y-4">
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <div className="flex items-start gap-3">
+                            <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                            <div className="text-sm text-yellow-800">
+                                <p className="font-medium mb-1">Lưu ý quan trọng</p>
+                                <p>Báo cáo sai sự thật có thể dẫn đến khóa tài khoản. Vui lòng chỉ báo cáo những tin tuyển dụng thực sự vi phạm.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Lý do báo cáo <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                            value={reportData.reason}
+                            onChange={(e) => setReportData({ ...reportData, reason: e.target.value })}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        >
+                            <option value="">-- Chọn lý do --</option>
+                            <option value="fake">Tin tuyển dụng giả mạo</option>
+                            <option value="scam">Lừa đảo / Thu phí bất hợp lý</option>
+                            <option value="inappropriate">Nội dung không phù hợp</option>
+                            <option value="duplicate">Tin trùng lặp</option>
+                            <option value="expired">Tin đã hết hạn nhưng vẫn hiển thị</option>
+                            <option value="wrong_info">Thông tin sai lệch</option>
+                            <option value="other">Lý do khác</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Mô tả chi tiết
+                        </label>
+                        <textarea
+                            rows={4}
+                            value={reportData.description}
+                            onChange={(e) => setReportData({ ...reportData, description: e.target.value })}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Vui lòng mô tả cụ thể vấn đề bạn gặp phải..."
+                        />
+                    </div>
+
+                    <div className="flex gap-3 pt-4 border-t">
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowReportModal(false)}
+                            className="flex-1"
+                        >
+                            Hủy
+                        </Button>
+                        <Button
+                            onClick={submitReport}
+                            className="flex-1 bg-red-600 hover:bg-red-700"
+                        >
+                            <Flag className="w-4 h-4 mr-2" />
+                            Gửi báo cáo
                         </Button>
                     </div>
                 </div>

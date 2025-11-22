@@ -1,54 +1,66 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { PageLoader } from './components/common/LoadingStates';
 
-// Layouts
+// Layouts (Keep these as direct imports - they're used frequently)
 import MainLayout from './layouts/MainLayout';
 import CandidateLayout from './layouts/CandidateLayout';
 import EmployerLayout from './layouts/EmployerLayout';
 import AdminLayout from './layouts/AdminLayout';
 
-// Public Pages
-import HomePage from './pages/public/HomePage';
+// Auth Pages (Keep direct - needed early)
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
-import JobsPage from './pages/public/JobsPage';
-import JobDetailPage from './pages/public/JobDetailPage';
-import CompaniesPage from './pages/public/CompaniesPage';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 
-// Candidate Pages
-import CandidateDashboard from './pages/candidate/CandidateDashboard';
-import CandidateProfilePage from './pages/candidate/CandidateProfilePage';
-import CandidateApplicationsPage from './pages/candidate/CandidateApplicationsPage';
-import CandidateSavedJobsPage from './pages/candidate/CandidateSavedJobsPage';
-import CandidateInterviewsPage from './pages/candidate/CandidateInterviewsPage';
-import CandidateMessagesPage from './pages/candidate/CandidateMessagesPage';
-import CandidateNotificationsPage from './pages/candidate/CandidateNotificationsPage';
-import CandidateSettingsPage from './pages/candidate/CandidateSettingsPage';
-import CandidatePremiumPage from './pages/candidate/CandidatePremiumPage';
+// Lazy load public pages
+const HomePage = lazy(() => import('./pages/public/HomePage'));
+const JobsPage = lazy(() => import('./pages/public/JobsPage'));
+const JobDetailPage = lazy(() => import('./pages/public/JobDetailPage'));
+const CompaniesPage = lazy(() => import('./pages/public/CompaniesPage'));
+const CompanyDetailPage = lazy(() => import('./pages/public/CompanyDetailPage'));
+const PricingPage = lazy(() => import('./pages/public/PricingPage'));
+const ContactPage = lazy(() => import('./pages/public/ContactPage'));
+const NotificationsPage = lazy(() => import('./pages/public/NotificationsPage'));
 
-// Employer Pages
-import EmployerDashboard from './pages/employer/EmployerDashboard';
-import EmployerJobsPage from './pages/employer/EmployerJobsPage';
-import EmployerCreateJobPage from './pages/employer/EmployerCreateJobPage';
-import EmployerApplicantsPage from './pages/employer/EmployerApplicantsPage';
-import EmployerEditJobPage from './pages/employer/EmployerEditJobPage';
-import EmployerCandidatesPage from './pages/employer/EmployerCandidatesPage';
-import EmployerAnalyticsPage from './pages/employer/EmployerAnalyticsPage';
-import EmployerCompanyProfilePage from './pages/employer/EmployerCompanyProfilePage';
-import EmployerBillingPage from './pages/employer/EmployerBillingPage';
+// Lazy load Candidate Pages
+const CandidateDashboard = lazy(() => import('./pages/candidate/CandidateDashboard'));
+const CandidateProfilePage = lazy(() => import('./pages/candidate/CandidateProfilePage'));
+const CandidateApplicationsPage = lazy(() => import('./pages/candidate/CandidateApplicationsPage'));
+const CandidateSavedJobsPage = lazy(() => import('./pages/candidate/CandidateSavedJobsPage'));
+const CandidateInterviewsPage = lazy(() => import('./pages/candidate/CandidateInterviewsPage'));
+const CandidateMessagesPage = lazy(() => import('./pages/candidate/CandidateMessagesPage'));
+const CandidateNotificationsPage = lazy(() => import('./pages/candidate/CandidateNotificationsPage'));
+const CandidateSettingsPage = lazy(() => import('./pages/candidate/CandidateSettingsPage'));
+const CandidatePremiumPage = lazy(() => import('./pages/candidate/CandidatePremiumPage'));
+const CVBuilderPage = lazy(() => import('./pages/candidate/CVBuilderPage'));
+const JobComparisonPage = lazy(() => import('./pages/candidate/JobComparisonPage'));
+const CoverLetterTemplatesPage = lazy(() => import('./pages/candidate/CoverLetterTemplatesPage'));
 
-// Admin Pages
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminUsersPage from './pages/admin/AdminUsersPage';
-import AdminJobsPage from './pages/admin/AdminJobsPage';
-import AdminCompaniesPage from './pages/admin/AdminCompaniesPage';
-import AdminKYCPage from './pages/admin/AdminKYCPage';
-import AdminContentPage from './pages/admin/AdminContentPage';
-import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
-import AdminPackagesPage from './pages/admin/AdminPackagesPage';
-import AdminReportsPage from './pages/admin/AdminReportsPage';
-import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+// Lazy load Employer Pages
+const EmployerDashboard = lazy(() => import('./pages/employer/EmployerDashboard'));
+const EmployerJobsPage = lazy(() => import('./pages/employer/EmployerJobsPage'));
+const EmployerCreateJobPage = lazy(() => import('./pages/employer/EmployerCreateJobPage'));
+const EmployerApplicantsPage = lazy(() => import('./pages/employer/EmployerApplicantsPage'));
+const EmployerEditJobPage = lazy(() => import('./pages/employer/EmployerEditJobPage'));
+const EmployerCandidatesPage = lazy(() => import('./pages/employer/EmployerCandidatesPage'));
+const EmployerAnalyticsPage = lazy(() => import('./pages/employer/EmployerAnalyticsPage'));
+const EmployerCompanyProfilePage = lazy(() => import('./pages/employer/EmployerCompanyProfilePage'));
+const EmployerBillingPage = lazy(() => import('./pages/employer/EmployerBillingPage'));
+const EmployerSettingsPage = lazy(() => import('./pages/employer/EmployerSettingsPage'));
+
+// Lazy load Admin Pages
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminUsersPage = lazy(() => import('./pages/admin/AdminUsersPage'));
+const AdminJobsPage = lazy(() => import('./pages/admin/AdminJobsPage'));
+const AdminCompaniesPage = lazy(() => import('./pages/admin/AdminCompaniesPage'));
+const AdminKYCPage = lazy(() => import('./pages/admin/AdminKYCPage'));
+const AdminContentPage = lazy(() => import('./pages/admin/AdminContentPage'));
+const AdminCategoriesPage = lazy(() => import('./pages/admin/AdminCategoriesPage'));
+const AdminPackagesPage = lazy(() => import('./pages/admin/AdminPackagesPage'));
+const AdminReportsPage = lazy(() => import('./pages/admin/AdminReportsPage'));
+const AdminSettingsPage = lazy(() => import('./pages/admin/AdminSettingsPage'));
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -91,17 +103,20 @@ const ComingSoon = ({ title }) => (
 
 function App() {
     return (
-        <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/jobs" element={<MainLayout><JobsPage /></MainLayout>} />
-            <Route path="/jobs/:id" element={<MainLayout><JobDetailPage /></MainLayout>} />
-            <Route path="/companies" element={<MainLayout><CompaniesPage /></MainLayout>} />
-            <Route path="/companies/:id" element={<MainLayout><ComingSoon title="Chi tiết công ty" /></MainLayout>} />
-            <Route path="/pricing" element={<MainLayout><ComingSoon title="Bảng giá" /></MainLayout>} />
-            <Route path="/forgot-password" element={<MainLayout><ComingSoon title="Quên mật khẩu" /></MainLayout>} />
+        <Suspense fallback={<PageLoader />}>
+            <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/jobs" element={<MainLayout><JobsPage /></MainLayout>} />
+                <Route path="/jobs/:id" element={<MainLayout><JobDetailPage /></MainLayout>} />
+                <Route path="/companies" element={<MainLayout><CompaniesPage /></MainLayout>} />
+                <Route path="/companies/:id" element={<MainLayout><CompanyDetailPage /></MainLayout>} />
+                <Route path="/pricing" element={<MainLayout><PricingPage /></MainLayout>} />
+                <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
+                <Route path="/notifications" element={<MainLayout><NotificationsPage /></MainLayout>} />
 
             {/* Candidate Routes */}
             <Route
@@ -122,6 +137,9 @@ function App() {
                 <Route path="notifications" element={<CandidateNotificationsPage />} />
                 <Route path="settings" element={<CandidateSettingsPage />} />
                 <Route path="premium" element={<CandidatePremiumPage />} />
+                <Route path="cv-builder" element={<CVBuilderPage />} />
+                <Route path="job-comparison" element={<JobComparisonPage />} />
+                <Route path="cover-letter" element={<CoverLetterTemplatesPage />} />
             </Route>
 
             {/* Employer Routes */}
@@ -143,7 +161,7 @@ function App() {
                 <Route path="company-profile" element={<EmployerCompanyProfilePage />} />
                 <Route path="billing" element={<EmployerBillingPage />} />
                 <Route path="messages" element={<ComingSoon title="Tin nhắn" />} />
-                <Route path="settings" element={<ComingSoon title="Cài đặt" />} />
+                <Route path="settings" element={<EmployerSettingsPage />} />
             </Route>
 
             {/* Admin Routes */}
@@ -187,7 +205,8 @@ function App() {
                     </MainLayout>
                 }
             />
-        </Routes>
+            </Routes>
+        </Suspense>
     );
 }
 

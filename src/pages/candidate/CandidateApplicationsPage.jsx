@@ -5,12 +5,14 @@ import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Table from '../../components/common/Table';
-import { Eye, MapPin, DollarSign, Calendar, Filter } from 'lucide-react';
+import Modal from '../../components/common/Modal';
+import { Eye, MapPin, DollarSign, Calendar, Filter, XCircle } from 'lucide-react';
 
 const CandidateApplicationsPage = () => {
     const { user } = useAuth();
-    const { jobs, applications } = useData();
+    const { jobs, applications, updateApplication } = useData();
     const [statusFilter, setStatusFilter] = useState('all');
+    const [withdrawModal, setWithdrawModal] = useState({ isOpen: false, application: null });
 
     const myApplications = applications
         .filter(a => a.candidateId === user?.id)
@@ -38,6 +40,22 @@ const CandidateApplicationsPage = () => {
         interview: 'Lịch phỏng vấn',
         rejected: 'Từ chối',
         accepted: 'Đã nhận'
+    };
+
+    const handleWithdraw = (application) => {
+        setWithdrawModal({ isOpen: true, application });
+    };
+
+    const confirmWithdraw = () => {
+        if (withdrawModal.application) {
+            // In real app, this would call an API
+            updateApplication(withdrawModal.application.id, { 
+                status: 'withdrawn',
+                withdrawnDate: new Date().toISOString()
+            });
+            setWithdrawModal({ isOpen: false, application: null });
+            alert('Đã rút đơn ứng tuyển thành công');
+        }
     };
 
     const columns = [
@@ -103,13 +121,24 @@ const CandidateApplicationsPage = () => {
         },
         {
             header: '',
-            accessor: 'jobId',
-            cell: (jobId) => (
-                <Link to={`/jobs/${jobId}`}>
-                    <button className="text-blue-600 hover:text-blue-700 p-2">
-                        <Eye className="w-5 h-5" />
-                    </button>
-                </Link>
+            accessor: 'id',
+            cell: (id, row) => (
+                <div className="flex items-center gap-2">
+                    <Link to={`/jobs/${row.jobId}`}>
+                        <button className="text-blue-600 hover:text-blue-700 p-2" title="Xem chi tiết">
+                            <Eye className="w-5 h-5" />
+                        </button>
+                    </Link>
+                    {row.status === 'pending' && (
+                        <button 
+                            onClick={() => handleWithdraw(row)}
+                            className="text-red-600 hover:text-red-700 p-2" 
+                            title="Rút đơn ứng tuyển"
+                        >
+                            <XCircle className="w-5 h-5" />
+                        </button>
+                    )}
+                </div>
             )
         }
     ];
@@ -236,6 +265,40 @@ const CandidateApplicationsPage = () => {
                     <Table columns={columns} data={filteredApplications} />
                 )}
             </Card>
+
+            {/* Withdraw Modal */}
+            <Modal
+                isOpen={withdrawModal.isOpen}
+                onClose={() => setWithdrawModal({ isOpen: false, application: null })}
+                title="Xác nhận rút đơn ứng tuyển"
+            >
+                <div className="space-y-4">
+                    <p className="text-gray-600">
+                        Bạn có chắc chắn muốn rút đơn ứng tuyển cho vị trí{' '}
+                        <span className="font-semibold text-gray-900">
+                            {withdrawModal.application?.job?.title}
+                        </span>
+                        ?
+                    </p>
+                    <p className="text-sm text-red-600">
+                        ⚠️ Hành động này không thể hoàn tác. Bạn có thể ứng tuyển lại sau nếu công việc vẫn còn mở.
+                    </p>
+                    <div className="flex justify-end gap-3 mt-6">
+                        <button
+                            onClick={() => setWithdrawModal({ isOpen: false, application: null })}
+                            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            onClick={confirmWithdraw}
+                            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                        >
+                            Xác nhận rút đơn
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 };

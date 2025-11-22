@@ -6,12 +6,14 @@ import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
 import Table from '../../components/common/Table';
-import { Plus, Eye, Edit, Trash2, MoreVertical } from 'lucide-react';
+import Modal from '../../components/common/Modal';
+import { Plus, Eye, Edit, Trash2, MoreVertical, Calendar, Clock } from 'lucide-react';
 
 const EmployerJobsPage = () => {
     const { user } = useAuth();
-    const { jobs, deleteJob } = useData();
+    const { jobs, deleteJob, updateJob } = useData();
     const [statusFilter, setStatusFilter] = useState('all');
+    const [extendModal, setExtendModal] = useState({ isOpen: false, job: null, days: 30 });
 
     const myJobs = jobs.filter(j => j.employerId === user?.id);
 
@@ -23,6 +25,34 @@ const EmployerJobsPage = () => {
         if (window.confirm('Bạn có chắc muốn xóa tin tuyển dụng này?')) {
             deleteJob(jobId);
         }
+    };
+
+    const handleExtend = (job) => {
+        setExtendModal({ isOpen: true, job, days: 30 });
+    };
+
+    const confirmExtend = () => {
+        if (extendModal.job) {
+            const currentExpiry = new Date(extendModal.job.expiryDate);
+            const newExpiry = new Date(currentExpiry.getTime() + extendModal.days * 24 * 60 * 60 * 1000);
+            
+            updateJob(extendModal.job.id, {
+                ...extendModal.job,
+                expiryDate: newExpiry.toISOString(),
+                status: 'active'
+            });
+            
+            setExtendModal({ isOpen: false, job: null, days: 30 });
+            alert(`Đã gia hạn tin tuyển dụng thêm ${extendModal.days} ngày!`);
+        }
+    };
+
+    const getDaysRemaining = (expiryDate) => {
+        const today = new Date();
+        const expiry = new Date(expiryDate);
+        const diffTime = expiry - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
     };
 
     const statusColors = {
@@ -91,8 +121,20 @@ const EmployerJobsPage = () => {
         },
         {
             header: 'Hạn nộp',
-            accessor: 'deadline',
-            cell: (date) => new Date(date).toLocaleDateString('vi-VN')
+            accessor: 'expiryDate',
+            cell: (date, row) => {
+                const daysRemaining = getDaysRemaining(date);
+                return (
+                    <div>
+                        <div className="text-sm text-gray-900">
+                            {new Date(date).toLocaleDateString('vi-VN')}
+                        </div>
+                        <div className={`text-xs ${daysRemaining < 7 ? 'text-red-600' : 'text-gray-500'}`}>
+                            {daysRemaining > 0 ? `Còn ${daysRemaining} ngày` : 'Đã hết hạn'}
+                        </div>
+                    </div>
+                );
+            }
         },
         {
             header: 'Trạng thái',
@@ -106,16 +148,24 @@ const EmployerJobsPage = () => {
         {
             header: '',
             accessor: 'id',
-            cell: (jobId) => (
+            cell: (jobId, row) => (
                 <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => handleExtend(row)}
+                        className="p-2 text-green-600 hover:text-green-700"
+                        title="Gia hạn tin"
+                    >
+                        <Clock className="w-5 h-5" />
+                    </button>
                     <Link to={`/employer/jobs/${jobId}/edit`}>
-                        <button className="p-2 text-blue-600 hover:text-blue-700">
+                        <button className="p-2 text-blue-600 hover:text-blue-700" title="Chỉnh sửa">
                             <Edit className="w-5 h-5" />
                         </button>
                     </Link>
                     <button
                         onClick={() => handleDelete(jobId)}
                         className="p-2 text-red-600 hover:text-red-700"
+                        title="Xóa"
                     >
                         <Trash2 className="w-5 h-5" />
                     </button>
@@ -252,6 +302,83 @@ const EmployerJobsPage = () => {
                     <Table columns={columns} data={filteredJobs} />
                 )}
             </Card>
+
+            {/* Extend Modal */}
+            <Modal
+                isOpen={extendModal.isOpen}
+                onClose={() => setExtendModal({ isOpen: false, job: null, days: 30 })}
+                title="Gia hạn tin tuyển dụng"
+            >
+                <div className="space-y-4">
+                    <div>
+                        <p className="text-gray-600 mb-2">
+                            Tin tuyển dụng:{' '}
+                            <span className="font-semibold text-gray-900">
+                                {extendModal.job?.title}
+                            </span>
+                        </p>
+                        <p className="text-sm text-gray-500">
+                            Ngày hết hạn hiện tại:{' '}
+                            {extendModal.job?.expiryDate && new Date(extendModal.job.expiryDate).toLocaleDateString('vi-VN')}
+                        </p>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Chọn thời gian gia hạn
+                        </label>
+                        <div className="grid grid-cols-3 gap-3">
+                            {[15, 30, 60].map((days) => (
+                                <button
+                                    key={days}
+                                    onClick={() => setExtendModal({ ...extendModal, days })}
+                                    className={`p-3 border-2 rounded-lg text-center transition-all ${
+                                        extendModal.days === days
+                                            ? 'border-blue-600 bg-blue-50 text-blue-700'
+                                            : 'border-gray-200 hover:border-blue-300'
+                                    }`}
+                                >
+                                    <div className="font-semibold">{days} ngày</div>
+                                    <div className="text-xs text-gray-500 mt-1">
+                                        {days === 15 ? 'Miễn phí' : days === 30 ? '50.000đ' : '90.000đ'}
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {extendModal.job?.expiryDate && (
+                        <div className="bg-blue-50 p-4 rounded-lg">
+                            <div className="flex items-center gap-2 text-blue-700">
+                                <Calendar className="w-5 h-5" />
+                                <span className="font-medium">Ngày hết hạn mới:</span>
+                            </div>
+                            <p className="text-blue-900 font-semibold mt-1">
+                                {new Date(
+                                    new Date(extendModal.job.expiryDate).getTime() + 
+                                    extendModal.days * 24 * 60 * 60 * 1000
+                                ).toLocaleDateString('vi-VN')}
+                            </p>
+                        </div>
+                    )}
+
+                    <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
+                        <button
+                            onClick={() => setExtendModal({ isOpen: false, job: null, days: 30 })}
+                            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            onClick={confirmExtend}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                        >
+                            <Clock className="w-4 h-4" />
+                            Xác nhận gia hạn
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 };
