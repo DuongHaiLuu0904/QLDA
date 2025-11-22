@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
@@ -7,9 +7,8 @@ import Badge from '../../components/common/Badge';
 import Table from '../../components/common/Table';
 import Modal from '../../components/common/Modal';
 import {
-    Users, Search, Filter, UserPlus, Edit, Trash2,
-    Shield, Ban, CheckCircle, Mail, Phone, Calendar,
-    Crown, Building2, UserCheck
+    Users, Search, UserPlus, Edit, Trash2,
+    Shield, Ban, CheckCircle, Crown, Building2, UserCheck
 } from 'lucide-react';
 
 const AdminUsersPage = () => {

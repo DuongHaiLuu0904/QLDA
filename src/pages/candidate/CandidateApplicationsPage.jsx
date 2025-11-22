@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
@@ -6,7 +6,7 @@ import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Table from '../../components/common/Table';
 import Modal from '../../components/common/Modal';
-import { Eye, MapPin, DollarSign, Calendar, Filter, XCircle } from 'lucide-react';
+import { Eye, MapPin, Calendar, Filter, XCircle } from 'lucide-react';
 
 const CandidateApplicationsPage = () => {
     const { user } = useAuth();

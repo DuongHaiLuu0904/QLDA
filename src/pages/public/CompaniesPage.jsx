@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, MapPin, Building2, Users, Briefcase, ExternalLink, CheckCircle } from 'lucide-react';
 import { useData } from '../../context/DataContext';

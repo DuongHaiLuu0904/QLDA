@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { mockServicePackages } from '../../services/mockData';
 import Card from '../../components/common/Card';
@@ -6,7 +6,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import {
     CreditCard, Package, CheckCircle, XCircle, Star,
-    Calendar, DollarSign, Receipt, Download, TrendingUp,
+    DollarSign, Receipt, Download, TrendingUp,
     Zap, Award, Clock
 } from 'lucide-react';
 

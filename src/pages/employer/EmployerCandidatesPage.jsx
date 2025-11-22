@@ -1,16 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { useData } from '../../context/DataContext';
+import { useState, useMemo } from 'react';
 import { mockCandidates } from '../../services/mockData';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
-import Input from '../../components/common/Input';
 import { Search, Filter, Users, MapPin, Briefcase, Mail, Phone, Star, Eye, Send } from 'lucide-react';
 
 const EmployerCandidatesPage = () => {
-    const { jobs } = useData();
-
     const [searchTerm, setSearchTerm] = useState('');
     const [filters, setFilters] = useState({
         location: '',

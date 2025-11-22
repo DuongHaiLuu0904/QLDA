@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Badge from '../../components/common/Badge';
-import { FileText, Copy, Save, Trash2, Eye, Edit3, Plus } from 'lucide-react';
+import { FileText, Copy, Save, Trash2, Eye, Plus } from 'lucide-react';
 
 const CoverLetterTemplatesPage = () => {
     const { user } = useAuth();
@@ -30,18 +30,18 @@ const CoverLetterTemplatesPage = () => {
             description: 'Phù hợp với các vị trí corporate, formal',
             content: `Kính gửi {recipientTitle} {recipientName},
 
-Tôi là {userName}, hiện đang tìm kiếm cơ hội làm việc tại vị trí {jobTitle} tại {companyName}. Với kinh nghiệm và kỹ năng của mình, tôi tin rằng mình có thể đóng góp tích cực cho sự phát triển của công ty.
+                    Tôi là {userName}, hiện đang tìm kiếm cơ hội làm việc tại vị trí {jobTitle} tại {companyName}. Với kinh nghiệm và kỹ năng của mình, tôi tin rằng mình có thể đóng góp tích cực cho sự phát triển của công ty.
 
-Trong quá trình học tập và làm việc, tôi đã tích lũy được:
-• Kinh nghiệm thực tế trong lĩnh vực {field}
-• Kỹ năng làm việc nhóm và giao tiếp hiệu quả
-• Khả năng học hỏi nhanh và thích nghi với môi trường mới
+                    Trong quá trình học tập và làm việc, tôi đã tích lũy được:
+                    • Kinh nghiệm thực tế trong lĩnh vực {field}
+                    • Kỹ năng làm việc nhóm và giao tiếp hiệu quả
+                    • Khả năng học hỏi nhanh và thích nghi với môi trường mới
 
-Tôi rất mong có cơ hội được trao đổi trực tiếp với {companyName} để thể hiện rõ hơn về năng lực và sự nhiệt huyết của mình.
+                    Tôi rất mong có cơ hội được trao đổi trực tiếp với {companyName} để thể hiện rõ hơn về năng lực và sự nhiệt huyết của mình.
 
-Trân trọng,
-{userName}
-{userEmail} | {userPhone}`
+                    Trân trọng,
+                    {userName}
+                    {userEmail} | {userPhone}`
         },
         {
             id: 'creative',
@@ -49,21 +49,21 @@ Trân trọng,
             description: 'Phù hợp với ngành design, marketing, startup',
             content: `Chào {recipientName},
 
-Tôi vô cùng hào hứng khi biết về vị trí {jobTitle} tại {companyName}! 🎯
+                    Tôi vô cùng hào hứng khi biết về vị trí {jobTitle} tại {companyName}! 🎯
 
-Là một người đam mê {field}, tôi luôn tìm kiếm cơ hội để thử thách bản thân và đóng góp giá trị thực sự. Những gì tôi có thể mang lại:
+                    Là một người đam mê {field}, tôi luôn tìm kiếm cơ hội để thử thách bản thân và đóng góp giá trị thực sự. Những gì tôi có thể mang lại:
 
-✨ Sự sáng tạo không giới hạn trong việc giải quyết vấn đề
-🚀 Năng lượng tích cực và tinh thần học hỏi không ngừng
-💡 Kinh nghiệm thực chiến với các dự án thực tế
+                    ✨ Sự sáng tạo không giới hạn trong việc giải quyết vấn đề
+                    🚀 Năng lượng tích cực và tinh thần học hỏi không ngừng
+                    💡 Kinh nghiệm thực chiến với các dự án thực tế
 
-Tôi tin rằng {companyName} là nơi lý tưởng để tôi phát huy thế mạnh và cùng team phát triển những sản phẩm tuyệt vời.
+                    Tôi tin rằng {companyName} là nơi lý tưởng để tôi phát huy thế mạnh và cùng team phát triển những sản phẩm tuyệt vời.
 
-Rất mong được kết nối!
+                    Rất mong được kết nối!
 
-Best regards,
-{userName}
-{userEmail} | {userPhone}`
+                    Best regards,
+                    {userName}
+                    {userEmail} | {userPhone}`
         },
         {
             id: 'technical',
@@ -71,27 +71,27 @@ Best regards,
             description: 'Phù hợp với vị trí IT, Engineering',
             content: `Dear {recipientName},
 
-I am writing to express my interest in the {jobTitle} position at {companyName}.
+                    I am writing to express my interest in the {jobTitle} position at {companyName}.
 
-Technical Skills & Experience:
-- Proficient in: {technicalSkills}
-- {experienceYears}+ years of hands-on experience
-- Strong problem-solving and analytical abilities
-- Experience with Agile/Scrum methodologies
+                    Technical Skills & Experience:
+                    - Proficient in: {technicalSkills}
+                    - {experienceYears}+ years of hands-on experience
+                    - Strong problem-solving and analytical abilities
+                    - Experience with Agile/Scrum methodologies
 
-I am particularly drawn to {companyName} because of your innovative approach to technology and commitment to excellence. I am confident that my technical expertise and passion for continuous learning would make me a valuable addition to your team.
+                    I am particularly drawn to {companyName} because of your innovative approach to technology and commitment to excellence. I am confident that my technical expertise and passion for continuous learning would make me a valuable addition to your team.
 
-Key achievements:
-• Successfully delivered multiple projects on time and within budget
-• Collaborated with cross-functional teams to implement scalable solutions
-• Contributed to open-source projects and technical communities
+                    Key achievements:
+                    • Successfully delivered multiple projects on time and within budget
+                    • Collaborated with cross-functional teams to implement scalable solutions
+                    • Contributed to open-source projects and technical communities
 
-I would welcome the opportunity to discuss how my skills align with your team's needs.
+                    I would welcome the opportunity to discuss how my skills align with your team's needs.
 
-Best regards,
-{userName}
-{userEmail} | {userPhone}
-GitHub: {githubProfile}`
+                    Best regards,
+                    {userName}
+                    {userEmail} | {userPhone}
+                    GitHub: {githubProfile}`
         },
         {
             id: 'internship',
@@ -99,21 +99,21 @@ GitHub: {githubProfile}`
             description: 'Cho sinh viên, người mới vào nghề',
             content: `Kính gửi {recipientTitle} {recipientName},
 
-Em là {userName}, sinh viên năm cuối chuyên ngành {major} tại {university}. Em rất quan tâm đến vị trí thực tập {jobTitle} tại {companyName}.
+                    Em là {userName}, sinh viên năm cuối chuyên ngành {major} tại {university}. Em rất quan tâm đến vị trí thực tập {jobTitle} tại {companyName}.
 
-Mặc dù chưa có nhiều kinh nghiệm thực tế, em có:
-• Nền tảng kiến thức vững chắc về {field}
-• Dự án cá nhân và nhóm trong quá trình học tập
-• Tinh thần học hỏi và sẵn sàng đón nhận thử thách
-• Kỹ năng làm việc nhóm qua các hoạt động ngoại khóa
+                    Mặc dù chưa có nhiều kinh nghiệm thực tế, em có:
+                    • Nền tảng kiến thức vững chắc về {field}
+                    • Dự án cá nhân và nhóm trong quá trình học tập
+                    • Tinh thần học hỏi và sẵn sàng đón nhận thử thách
+                    • Kỹ năng làm việc nhóm qua các hoạt động ngoại khóa
 
-Em mong muốn có cơ hội được học hỏi và trải nghiệm môi trường chuyên nghiệp tại {companyName}. Em tin rằng đây sẽ là bước đệm quan trọng cho sự nghiệp tương lai của em.
+                    Em mong muốn có cơ hội được học hỏi và trải nghiệm môi trường chuyên nghiệp tại {companyName}. Em tin rằng đây sẽ là bước đệm quan trọng cho sự nghiệp tương lai của em.
 
-Em rất mong được trao đổi thêm với quý công ty.
+                    Em rất mong được trao đổi thêm với quý công ty.
 
-Trân trọng,
-{userName}
-{userEmail} | {userPhone}`
+                    Trân trọng,
+                    {userName}
+                    {userEmail} | {userPhone}`
         }
     ];
 

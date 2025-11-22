@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, Loader } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';

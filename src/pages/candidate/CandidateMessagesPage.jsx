@@ -1,9 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { mockUsers } from '../../services/mockData';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
-import Input from '../../components/common/Input';
 import {
     MessageCircle, Send, Search, MoreVertical,
     Paperclip, Image, Smile, Check, CheckCheck,

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, MapPin, Briefcase, Filter, X, DollarSign, Clock, Bookmark, BookmarkCheck } from 'lucide-react';
 import { useData } from '../../context/DataContext';

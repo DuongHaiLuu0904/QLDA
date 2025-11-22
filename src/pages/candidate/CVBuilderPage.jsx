@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
-import { Download, Eye, Edit3, Trash2, Plus, GripVertical } from 'lucide-react';
+import { Download, Eye, GripVertical } from 'lucide-react';
 
 const CVBuilderPage = () => {
     const { user } = useAuth();

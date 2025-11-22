@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
@@ -6,8 +6,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import {
     User, Mail, Lock, Bell, Shield, Eye, EyeOff,
-    Globe, Smartphone, Trash2, Download, AlertCircle,
-    CheckCircle, Save, Settings as SettingsIcon
+    Globe, Smartphone, Trash2, Download, Save,  
 } from 'lucide-react';
 
 const CandidateSettingsPage = () => {

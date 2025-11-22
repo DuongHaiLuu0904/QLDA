@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
@@ -6,7 +6,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import {
     Building2, Globe, MapPin, Phone, Mail, Users,
-    Calendar, Shield, Upload, X, Plus, Save, CheckCircle
+    Shield, Upload, X, Plus, Save, CheckCircle
 } from 'lucide-react';
 
 const EmployerCompanyProfilePage = () => {

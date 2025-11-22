@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
@@ -7,7 +7,7 @@ import Table from '../../components/common/Table';
 import Modal from '../../components/common/Modal';
 import {
     Briefcase, Search, Eye, CheckCircle, XCircle,
-    Clock, Trash2, Filter, Calendar, DollarSign,
+    Clock, Trash2, Calendar, DollarSign,
     MapPin, TrendingUp, AlertCircle
 } from 'lucide-react';
 

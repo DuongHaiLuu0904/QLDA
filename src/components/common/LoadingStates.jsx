@@ -1,5 +1,3 @@
-import React from 'react';
-
 // Spinner Component
 export const Spinner = ({ size = 'md', className = '' }) => {
   const sizes = {

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import Input from '../../components/common/Input';
 import Modal from '../../components/common/Modal';
-import { DollarSign, Plus, Edit, Check, X } from 'lucide-react';
+import { Plus, Edit, Check, X } from 'lucide-react';
 
 const AdminPackagesPage = () => {
     const { servicePackages, updatePackage, addPackage } = useData();

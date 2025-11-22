@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, Outlet } from 'react-router-dom';
 import {
     LayoutDashboard, User, Briefcase, BookmarkPlus,
     Bell, Calendar, MessageSquare, Settings, Menu, X,

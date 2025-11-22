@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
-import { Settings, Mail, DollarSign, Shield, Bell, Database, Save } from 'lucide-react';
+import { Settings, Mail, DollarSign, Shield, Save } from 'lucide-react';
 
 const AdminSettingsPage = () => {
     const [settings, setSettings] = useState({

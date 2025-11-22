@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Briefcase, FileText, BookmarkPlus, Calendar, TrendingUp, Eye, Star, BarChart3 } from 'lucide-react';
+import { FileText, BookmarkPlus, Calendar, Eye, Star, BarChart3 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';

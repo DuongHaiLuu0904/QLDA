@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Briefcase, Users, Eye, TrendingUp, DollarSign, CheckCircle } from 'lucide-react';
+import { Briefcase, Users, Eye, TrendingUp, DollarSign } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';

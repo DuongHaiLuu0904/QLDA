@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
-import { Briefcase, MapPin, DollarSign, Users, Calendar, FileText, Plus, X } from 'lucide-react';
+import { Briefcase, DollarSign, Users, Calendar, Plus, X } from 'lucide-react';
 
 const EmployerCreateJobPage = () => {
     const navigate = useNavigate();

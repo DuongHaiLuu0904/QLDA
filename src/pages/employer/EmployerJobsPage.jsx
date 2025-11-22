@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
@@ -7,7 +7,7 @@ import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
 import Table from '../../components/common/Table';
 import Modal from '../../components/common/Modal';
-import { Plus, Eye, Edit, Trash2, MoreVertical, Calendar, Clock } from 'lucide-react';
+import { Plus, Eye, Edit, Trash2, Calendar, Clock } from 'lucide-react';
 
 const EmployerJobsPage = () => {
     const { user } = useAuth();

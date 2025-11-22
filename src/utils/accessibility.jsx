@@ -5,15 +5,15 @@ import { useEffect, useRef } from 'react';
  * @param {boolean} shouldFocus - Whether to focus the element
  */
 export const useFocusManagement = (shouldFocus = false) => {
-  const elementRef = useRef(null);
+    const elementRef = useRef(null);
 
-  useEffect(() => {
-    if (shouldFocus && elementRef.current) {
-      elementRef.current.focus();
-    }
-  }, [shouldFocus]);
+    useEffect(() => {
+        if (shouldFocus && elementRef.current) {
+            elementRef.current.focus();
+        }
+    }, [shouldFocus]);
 
-  return elementRef;
+    return elementRef;
 };
 
 /**
@@ -22,18 +22,18 @@ export const useFocusManagement = (shouldFocus = false) => {
  * @param {Function} onEscape - Callback for Escape key
  */
 export const useKeyboardNavigation = (onEnter, onEscape) => {
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Enter' && onEnter) {
-        onEnter(event);
-      } else if (event.key === 'Escape' && onEscape) {
-        onEscape(event);
-      }
-    };
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Enter' && onEnter) {
+                onEnter(event);
+            } else if (event.key === 'Escape' && onEscape) {
+                onEscape(event);
+            }
+        };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [onEnter, onEscape]);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [onEnter, onEscape]);
 };
 
 /**
@@ -41,14 +41,14 @@ export const useKeyboardNavigation = (onEnter, onEscape) => {
  * @param {string} title - Page title
  */
 export const usePageTitle = (title) => {
-  useEffect(() => {
-    const prevTitle = document.title;
-    document.title = title ? `${title} - Job Portal` : 'Job Portal';
-    
-    return () => {
-      document.title = prevTitle;
-    };
-  }, [title]);
+    useEffect(() => {
+        const prevTitle = document.title;
+        document.title = title ? `${title} - Job Portal` : 'Job Portal';
+
+        return () => {
+            document.title = prevTitle;
+        };
+    }, [title]);
 };
 
 /**
@@ -57,29 +57,29 @@ export const usePageTitle = (title) => {
  * @param {string} priority - 'polite' or 'assertive'
  */
 export const useAnnouncement = (message, priority = 'polite') => {
-  useEffect(() => {
-    if (!message) return;
+    useEffect(() => {
+        if (!message) return;
 
-    const announcement = document.createElement('div');
-    announcement.setAttribute('role', 'status');
-    announcement.setAttribute('aria-live', priority);
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
-    announcement.textContent = message;
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', priority);
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.className = 'sr-only';
+        announcement.textContent = message;
 
-    document.body.appendChild(announcement);
+        document.body.appendChild(announcement);
 
-    const timer = setTimeout(() => {
-      document.body.removeChild(announcement);
-    }, 1000);
+        const timer = setTimeout(() => {
+            document.body.removeChild(announcement);
+        }, 1000);
 
-    return () => {
-      clearTimeout(timer);
-      if (document.body.contains(announcement)) {
-        document.body.removeChild(announcement);
-      }
-    };
-  }, [message, priority]);
+        return () => {
+            clearTimeout(timer);
+            if (document.body.contains(announcement)) {
+                document.body.removeChild(announcement);
+            }
+        };
+    }, [message, priority]);
 };
 
 /**
@@ -88,60 +88,60 @@ export const useAnnouncement = (message, priority = 'polite') => {
  * @param {boolean} isActive - Whether focus trap is active
  */
 export const useFocusTrap = (containerRef, isActive = true) => {
-  useEffect(() => {
-    if (!isActive || !containerRef.current) return;
+    useEffect(() => {
+        if (!isActive || !containerRef.current) return;
 
-    const container = containerRef.current;
-    const focusableElements = container.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
+        const container = containerRef.current;
+        const focusableElements = container.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
 
-    const handleTabKey = (e) => {
-      if (e.key !== 'Tab') return;
+        const handleTabKey = (e) => {
+            if (e.key !== 'Tab') return;
 
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          lastElement?.focus();
-          e.preventDefault();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          firstElement?.focus();
-          e.preventDefault();
-        }
-      }
-    };
+            if (e.shiftKey) {
+                if (document.activeElement === firstElement) {
+                    lastElement?.focus();
+                    e.preventDefault();
+                }
+            } else {
+                if (document.activeElement === lastElement) {
+                    firstElement?.focus();
+                    e.preventDefault();
+                }
+            }
+        };
 
-    container.addEventListener('keydown', handleTabKey);
-    firstElement?.focus();
+        container.addEventListener('keydown', handleTabKey);
+        firstElement?.focus();
 
-    return () => {
-      container.removeEventListener('keydown', handleTabKey);
-    };
-  }, [containerRef, isActive]);
+        return () => {
+            container.removeEventListener('keydown', handleTabKey);
+        };
+    }, [containerRef, isActive]);
 };
 
 /**
  * Skip to main content link component
  */
 export const SkipToMain = () => {
-  return (
-    <a
-      href="#main-content"
-      className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg"
-    >
-      Chuyển đến nội dung chính
-    </a>
-  );
+    return (
+        <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg"
+        >
+            Chuyển đến nội dung chính
+        </a>
+    );
 };
 
 export default {
-  useFocusManagement,
-  useKeyboardNavigation,
-  usePageTitle,
-  useAnnouncement,
-  useFocusTrap,
-  SkipToMain
+    useFocusManagement,
+    useKeyboardNavigation,
+    usePageTitle,
+    useAnnouncement,
+    useFocusTrap,
+    SkipToMain
 };

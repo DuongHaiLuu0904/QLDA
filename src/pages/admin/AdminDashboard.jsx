@@ -1,16 +1,14 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Briefcase, Building2, DollarSign, TrendingUp, AlertCircle, Shield, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Users, Briefcase, Building2, TrendingUp, AlertCircle } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 const AdminDashboard = () => {
     const { jobs, applications, users, companies } = useData();
 
     const candidates = users.filter(u => u.role === 'candidate');
-    const employers = users.filter(u => u.role === 'employer');
     const activeJobs = jobs.filter(j => j.status === 'active');
     const pendingJobs = jobs.filter(j => j.approvalStatus === 'pending');
     const verifiedCompanies = companies.filter(c => c.isVerified);

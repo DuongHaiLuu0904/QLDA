@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Check, X, Star, TrendingUp, Zap, Award } from 'lucide-react';
 import { useData } from '../../context/DataContext';

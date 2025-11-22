@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
-import {
-    TrendingUp, Users, Briefcase, DollarSign,
-    Calendar, BarChart3
-} from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { TrendingUp, Users, Briefcase, DollarSign } from 'lucide-react';
+import { 
+    LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, 
+    YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
+} from 'recharts';
 
 const AdminReportsPage = () => {
     const { jobs, applications, users } = useData();

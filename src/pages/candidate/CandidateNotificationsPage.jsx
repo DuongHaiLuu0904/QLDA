@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
@@ -6,8 +6,7 @@ import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
 import {
     Bell, BellOff, Briefcase, Calendar, MessageCircle,
-    CheckCircle, XCircle, AlertCircle, Trash2, Archive,
-    Filter, Check, Mail, Settings
+    AlertCircle, Trash2, Archive, Filter, Check, Mail, Settings
 } from 'lucide-react';
 
 const CandidateNotificationsPage = () => {

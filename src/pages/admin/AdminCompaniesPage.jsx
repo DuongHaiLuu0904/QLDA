@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';

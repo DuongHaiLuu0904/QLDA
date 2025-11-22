@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
@@ -7,7 +7,7 @@ import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Table from '../../components/common/Table';
 import Button from '../../components/common/Button';
-import { Eye, Mail, Phone, Download, CheckCircle, XCircle, Clock, ArrowLeft, Star } from 'lucide-react';
+import { Eye, Mail, Phone, CheckCircle, Clock, ArrowLeft, Star } from 'lucide-react';
 
 const EmployerApplicantsPage = () => {
     const { jobId } = useParams();

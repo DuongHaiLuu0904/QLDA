@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import { mockUsers } from '../../services/mockData';
@@ -6,9 +6,8 @@ import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
 import {
-    Calendar, Clock, Video, MapPin, Briefcase, User,
-    CheckCircle, XCircle, AlertCircle, Phone, Mail,
-    ChevronLeft, ChevronRight, Filter, Download, Bell, CalendarPlus
+    Calendar, Clock, Video, MapPin, User,
+    CheckCircle, AlertCircle, Phone,Filter, Download, Bell, CalendarPlus
 } from 'lucide-react';
 
 const CandidateInterviewsPage = () => {
@@ -16,7 +15,6 @@ const CandidateInterviewsPage = () => {
     const { applications } = useData();
 
     const [filter, setFilter] = useState('upcoming'); // upcoming, past, all
-    const [currentMonth, setCurrentMonth] = useState(new Date());
 
     // Get interviews from applications with interview status
     const interviews = useMemo(() => {
@@ -126,29 +124,29 @@ const CandidateInterviewsPage = () => {
         const endDate = formatDate(interview.date, `${endDateTime.getHours()}:${endDateTime.getMinutes()}`);
 
         const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//JobPortal//Interview Calendar//EN
-BEGIN:VEVENT
-UID:interview-${interview.id}@jobportal.com
-DTSTAMP:${formatDate(new Date().toISOString().split('T')[0], '00:00')}
-DTSTART:${startDate}
-DTEND:${endDate}
-SUMMARY:Phỏng vấn ${interview.jobTitle} - ${interview.company}
-DESCRIPTION:Vị trí: ${interview.jobTitle}\\nCông ty: ${interview.company}\\nNgười phỏng vấn: ${interview.interviewer}\\nLoại: ${interview.type === 'video' ? 'Trực tuyến' : interview.type === 'phone' ? 'Điện thoại' : 'Tại văn phòng'}${interview.meetingLink ? `\\nLink: ${interview.meetingLink}` : ''}${interview.notes ? `\\nGhi chú: ${interview.notes}` : ''}
-LOCATION:${interview.location}
-STATUS:CONFIRMED
-BEGIN:VALARM
-TRIGGER:-PT1H
-ACTION:DISPLAY
-DESCRIPTION:Nhắc nhở: Phỏng vấn ${interview.jobTitle} sau 1 giờ nữa
-END:VALARM
-BEGIN:VALARM
-TRIGGER:-PT24H
-ACTION:DISPLAY
-DESCRIPTION:Nhắc nhở: Phỏng vấn ${interview.jobTitle} vào ngày mai
-END:VALARM
-END:VEVENT
-END:VCALENDAR`;
+                            VERSION:2.0
+                            PRODID:-//JobPortal//Interview Calendar//EN
+                            BEGIN:VEVENT
+                            UID:interview-${interview.id}@jobportal.com
+                            DTSTAMP:${formatDate(new Date().toISOString().split('T')[0], '00:00')}
+                            DTSTART:${startDate}
+                            DTEND:${endDate}
+                            SUMMARY:Phỏng vấn ${interview.jobTitle} - ${interview.company}
+                            DESCRIPTION:Vị trí: ${interview.jobTitle}\\nCông ty: ${interview.company}\\nNgười phỏng vấn: ${interview.interviewer}\\nLoại: ${interview.type === 'video' ? 'Trực tuyến' : interview.type === 'phone' ? 'Điện thoại' : 'Tại văn phòng'}${interview.meetingLink ? `\\nLink: ${interview.meetingLink}` : ''}${interview.notes ? `\\nGhi chú: ${interview.notes}` : ''}
+                            LOCATION:${interview.location}
+                            STATUS:CONFIRMED
+                            BEGIN:VALARM
+                            TRIGGER:-PT1H
+                            ACTION:DISPLAY
+                            DESCRIPTION:Nhắc nhở: Phỏng vấn ${interview.jobTitle} sau 1 giờ nữa
+                            END:VALARM
+                            BEGIN:VALARM
+                            TRIGGER:-PT24H
+                            ACTION:DISPLAY
+                            DESCRIPTION:Nhắc nhở: Phỏng vấn ${interview.jobTitle} vào ngày mai
+                            END:VALARM
+                            END:VEVENT
+                            END:VCALENDAR`;
 
         const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
         const url = URL.createObjectURL(blob);
@@ -176,11 +174,11 @@ END:VCALENDAR`;
         };
         
         const details = `Vị trí: ${interview.jobTitle}
-Công ty: ${interview.company}
-Người phỏng vấn: ${interview.interviewer}
-Loại: ${interview.type === 'video' ? 'Trực tuyến' : interview.type === 'phone' ? 'Điện thoại' : 'Tại văn phòng'}
-${interview.meetingLink ? `Link: ${interview.meetingLink}` : ''}
-${interview.notes ? `Ghi chú: ${interview.notes}` : ''}`;
+                        Công ty: ${interview.company}
+                        Người phỏng vấn: ${interview.interviewer}
+                        Loại: ${interview.type === 'video' ? 'Trực tuyến' : interview.type === 'phone' ? 'Điện thoại' : 'Tại văn phòng'}
+                        ${interview.meetingLink ? `Link: ${interview.meetingLink}` : ''}
+                        ${interview.notes ? `Ghi chú: ${interview.notes}` : ''}`;
         
         const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Phỏng vấn ${interview.jobTitle} - ${interview.company}`)}&dates=${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(interview.location)}`;
         

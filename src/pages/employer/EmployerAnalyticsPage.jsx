@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
-import Badge from '../../components/common/Badge';
 import {
     TrendingUp, Users, Eye, Briefcase, CheckCircle, Clock, XCircle,
     Calendar, DollarSign, Target, Award, BarChart3

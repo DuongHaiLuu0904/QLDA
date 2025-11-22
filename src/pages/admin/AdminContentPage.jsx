@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
-import { FileText, Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 
 const AdminContentPage = () => {
     const [contents, setContents] = useState([

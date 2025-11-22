@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
-import { X, MapPin, DollarSign, Briefcase, Clock, Users, TrendingUp, CheckCircle, XCircle } from 'lucide-react';
+import { X, MapPin, DollarSign, Briefcase, Clock, Users, TrendingUp, CheckCircle } from 'lucide-react';
 
 const JobComparisonPage = () => {
     const { jobs } = useData();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Briefcase, TrendingUp, Users, Building2, ArrowRight } from 'lucide-react';
 import Button from '../../components/common/Button';

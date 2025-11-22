@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
     Bell, 
@@ -11,8 +11,7 @@ import {
     Mail,
     Filter,
     Check,
-    Trash2,
-    MoreVertical
+    Trash2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
