@@ -11,6 +11,7 @@ import { mockCompanies } from '../../services/mockData';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
+import CompanyLogo from '../../components/common/CompanyLogo';
 import Modal from '../../components/common/Modal';
 import Input from '../../components/common/Input';
 
@@ -134,10 +135,12 @@ const CompanyDetailPage = () => {
                 {/* Company Header */}
                 <Card padding="lg" className="-mt-20 mb-8">
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-                        <img
+                        <CompanyLogo
                             src={company.logo}
+                            companyName={company.name}
                             alt={company.name}
-                            className="w-32 h-32 rounded-lg object-cover border-4 border-white shadow-lg"
+                            size="2xl"
+                            className="border-4 border-white shadow-lg"
                         />
                         <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">

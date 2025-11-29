@@ -11,6 +11,7 @@ import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
+import CompanyLogo from '../../components/common/CompanyLogo';
 
 const JobDetailPage = () => {
     const { id } = useParams();
@@ -122,10 +123,11 @@ const JobDetailPage = () => {
                         {/* Job Header */}
                         <Card padding="lg">
                             <div className="flex items-start gap-4 mb-6">
-                                <img
+                                <CompanyLogo
                                     src={job.employerLogo}
+                                    companyName={job.employerName}
                                     alt={job.employerName}
-                                    className="w-20 h-20 rounded-lg object-cover"
+                                    size="lg"
                                 />
                                 <div className="flex-1">
                                     <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -315,10 +317,12 @@ const JobDetailPage = () => {
                                     Về công ty
                                 </h3>
                                 <div className="text-center mb-4">
-                                    <img
+                                    <CompanyLogo
                                         src={job.employerLogo}
+                                        companyName={job.employerName}
                                         alt={job.employerName}
-                                        className="w-24 h-24 rounded-lg mx-auto mb-3 object-cover"
+                                        size="xl"
+                                        className="mx-auto mb-3"
                                     />
                                     <h4 className="font-semibold text-gray-900">
                                         {job.employerName}
@@ -346,10 +350,11 @@ const JobDetailPage = () => {
                                                 className="block group"
                                             >
                                                 <div className="flex items-start gap-3">
-                                                    <img
+                                                    <CompanyLogo
                                                         src={relJob.employerLogo}
+                                                        companyName={relJob.employerName}
                                                         alt={relJob.employerName}
-                                                        className="w-12 h-12 rounded-lg object-cover"
+                                                        size="sm"
                                                     />
                                                     <div className="flex-1 min-w-0">
                                                         <h4 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">

@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
+import CompanyLogo from '../../components/common/CompanyLogo';
 
 const CandidateDashboard = () => {
     const { user } = useAuth();
@@ -316,10 +317,11 @@ const CandidateDashboard = () => {
                                 const job = jobs.find(j => j.id === app.jobId);
                                 return (
                                     <div key={app.id} className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
-                                        <img
+                                        <CompanyLogo
                                             src={job?.employerLogo}
+                                            companyName={job?.employerName}
                                             alt={job?.employerName}
-                                            className="w-12 h-12 rounded object-cover"
+                                            size="sm"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <h4 className="font-semibold text-gray-900 truncate">{job?.title}</h4>
@@ -358,10 +360,11 @@ const CandidateDashboard = () => {
                                 className="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                             >
                                 <div className="flex items-start space-x-4">
-                                    <img
+                                    <CompanyLogo
                                         src={job.employerLogo}
+                                        companyName={job.employerName}
                                         alt={job.employerName}
-                                        className="w-12 h-12 rounded object-cover"
+                                        size="sm"
                                     />
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-start justify-between mb-1">

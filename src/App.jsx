@@ -49,6 +49,7 @@ const EmployerAnalyticsPage = lazy(() => import('./pages/employer/EmployerAnalyt
 const EmployerCompanyProfilePage = lazy(() => import('./pages/employer/EmployerCompanyProfilePage'));
 const EmployerBillingPage = lazy(() => import('./pages/employer/EmployerBillingPage'));
 const EmployerSettingsPage = lazy(() => import('./pages/employer/EmployerSettingsPage'));
+const EmployerMessagesPage = lazy(() => import('./pages/employer/EmployerMessagesPage'));
 
 // Lazy load Admin Pages
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -160,7 +161,7 @@ function App() {
                 <Route path="analytics" element={<EmployerAnalyticsPage />} />
                 <Route path="company-profile" element={<EmployerCompanyProfilePage />} />
                 <Route path="billing" element={<EmployerBillingPage />} />
-                <Route path="messages" element={<ComingSoon title="Tin nhắn" />} />
+                <Route path="messages" element={<EmployerMessagesPage />} />
                 <Route path="settings" element={<EmployerSettingsPage />} />
             </Route>
 

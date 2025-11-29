@@ -368,7 +368,7 @@ const EmployerCompanyProfilePage = () => {
                             onChange={handleChange}
                             disabled={!isEditing}
                             placeholder="https://example.com"
-                            icon={Globe}
+                            icon={<Globe className="h-5 w-5" />}
                         />
 
                         <Input
@@ -378,7 +378,7 @@ const EmployerCompanyProfilePage = () => {
                             onChange={handleChange}
                             disabled={!isEditing}
                             placeholder="Số nhà, đường, quận/huyện, thành phố"
-                            icon={MapPin}
+                            icon={<MapPin className="h-5 w-5" />}
                             required
                         />
 
@@ -390,7 +390,7 @@ const EmployerCompanyProfilePage = () => {
                                 value={formData.phone}
                                 onChange={handleChange}
                                 disabled={!isEditing}
-                                icon={Phone}
+                                icon={<Phone className="h-5 w-5" />}
                                 required
                             />
 
@@ -401,7 +401,7 @@ const EmployerCompanyProfilePage = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 disabled={!isEditing}
-                                icon={Mail}
+                                icon={<Mail className="h-5 w-5" />}
                                 required
                             />
                         </div>

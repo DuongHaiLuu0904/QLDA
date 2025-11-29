@@ -8,6 +8,7 @@ import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Modal from '../../components/common/Modal';
+import CompanyLogo from '../../components/common/CompanyLogo';
 
 const JobsPage = () => {
     const [searchParams] = useSearchParams();
@@ -548,10 +549,12 @@ const JobsPage = () => {
                                 <Link to={`/jobs/${job.id}`}>
                                     <div className="flex items-start gap-4">
                                         {/* Company Logo */}
-                                        <img
+                                        <CompanyLogo
                                             src={job.employerLogo}
+                                            companyName={job.employerName}
                                             alt={job.employerName}
-                                            className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                                            size="md"
+                                            className="flex-shrink-0"
                                         />
 
                                         {/* Job Info */}

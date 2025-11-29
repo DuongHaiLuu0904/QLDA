@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
+import CompanyLogo from '../../components/common/CompanyLogo';
 import {
     MessageCircle, Send, Search, MoreVertical,
     Paperclip, Image, Smile, Check, CheckCheck,
@@ -193,10 +194,13 @@ const CandidateMessagesPage = () => {
                                         }`}
                                 >
                                     <div className="flex items-start gap-3">
-                                        <img
+                                        <CompanyLogo
                                             src={conv.employerLogo}
+                                            companyName={conv.employerName}
                                             alt={conv.employerName}
-                                            className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                                            size="sm"
+                                            rounded="full"
+                                            className="flex-shrink-0"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-1">
@@ -233,10 +237,12 @@ const CandidateMessagesPage = () => {
                                 {/* Chat Header */}
                                 <div className="p-4 border-b flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <img
+                                        <CompanyLogo
                                             src={selectedConversation.employerLogo}
+                                            companyName={selectedConversation.employerName}
                                             alt={selectedConversation.employerName}
-                                            className="w-10 h-10 rounded-full object-cover"
+                                            size="xs"
+                                            rounded="full"
                                         />
                                         <div>
                                             <h3 className="font-semibold text-gray-900">

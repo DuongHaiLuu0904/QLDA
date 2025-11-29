@@ -6,6 +6,7 @@ import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Table from '../../components/common/Table';
 import Modal from '../../components/common/Modal';
+import CompanyLogo from '../../components/common/CompanyLogo';
 import { Eye, MapPin, Calendar, Filter, XCircle } from 'lucide-react';
 
 const CandidateApplicationsPage = () => {
@@ -64,10 +65,11 @@ const CandidateApplicationsPage = () => {
             accessor: 'job',
             cell: (job) => (
                 <div className="flex items-center gap-3">
-                    <img
+                    <CompanyLogo
                         src={job.employerLogo}
+                        companyName={job.employerName}
                         alt={job.employerName}
-                        className="w-12 h-12 rounded-lg object-cover"
+                        size="sm"
                     />
                     <div>
                         <Link

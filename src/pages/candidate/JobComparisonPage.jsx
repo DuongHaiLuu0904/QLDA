@@ -4,6 +4,7 @@ import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
+import CompanyLogo from '../../components/common/CompanyLogo';
 import { X, MapPin, DollarSign, Briefcase, Clock, Users, TrendingUp, CheckCircle } from 'lucide-react';
 
 const JobComparisonPage = () => {
@@ -170,10 +171,11 @@ const JobComparisonPage = () => {
                                     }`}
                                 >
                                     <div className="flex items-start gap-3 mb-2">
-                                        <img 
-                                            src={job.employerLogo} 
+                                        <CompanyLogo
+                                            src={job.employerLogo}
+                                            companyName={job.employerName}
                                             alt={job.employerName}
-                                            className="w-10 h-10 rounded object-cover"
+                                            size="xs"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <h4 className="font-semibold text-gray-900 truncate">{job.title}</h4>
@@ -220,10 +222,11 @@ const JobComparisonPage = () => {
                                         <th key={job.id} className="px-6 py-4 min-w-[280px]">
                                             <div className="text-left">
                                                 <div className="flex items-start gap-3 mb-3">
-                                                    <img 
-                                                        src={job.employerLogo} 
+                                                    <CompanyLogo
+                                                        src={job.employerLogo}
+                                                        companyName={job.employerName}
                                                         alt={job.employerName}
-                                                        className="w-12 h-12 rounded object-cover"
+                                                        size="sm"
                                                     />
                                                     <div className="flex-1">
                                                         <h4 className="font-semibold text-gray-900 text-base mb-1">

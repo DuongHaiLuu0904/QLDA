@@ -5,6 +5,7 @@ import { mockUsers } from '../../services/mockData';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
+import CompanyLogo from '../../components/common/CompanyLogo';
 import {
     Calendar, Clock, Video, MapPin, User,
     CheckCircle, AlertCircle, Phone,Filter, Download, Bell, CalendarPlus
@@ -314,10 +315,11 @@ const CandidateInterviewsPage = () => {
                                 <div className="p-6">
                                     <div className="flex items-start justify-between mb-4">
                                         <div className="flex items-start gap-4">
-                                            <img
+                                            <CompanyLogo
                                                 src={interview.companyLogo}
+                                                companyName={interview.company}
                                                 alt={interview.company}
-                                                className="w-12 h-12 rounded-lg object-cover"
+                                                size="sm"
                                             />
                                             <div>
                                                 <h3 className="text-lg font-semibold text-gray-900 mb-1">

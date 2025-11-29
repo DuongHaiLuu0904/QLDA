@@ -4,6 +4,7 @@ import { Search, MapPin, Briefcase, TrendingUp, Users, Building2, ArrowRight } f
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
+import CompanyLogo from '../../components/common/CompanyLogo';
 import { useData } from '../../context/DataContext';
 
 const HomePage = () => {
@@ -147,10 +148,11 @@ const HomePage = () => {
                             <Card key={job.id} padding="md" hover>
                                 <Link to={`/jobs/${job.id}`}>
                                     <div className="flex items-start space-x-4 mb-4">
-                                        <img
+                                        <CompanyLogo
                                             src={job.employerLogo}
+                                            companyName={job.employerName}
                                             alt={job.employerName}
-                                            className="w-14 h-14 rounded-lg object-cover"
+                                            size="sm"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <h3 className="font-semibold text-gray-900 mb-1 hover:text-blue-600 transition-colors">

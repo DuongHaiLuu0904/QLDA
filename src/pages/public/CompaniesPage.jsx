@@ -6,6 +6,7 @@ import { mockCompanies } from '../../services/mockData';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Input from '../../components/common/Input';
+import CompanyLogo from '../../components/common/CompanyLogo';
 
 const CompaniesPage = () => {
     const { jobs } = useData();
@@ -122,10 +123,12 @@ const CompaniesPage = () => {
                                         {/* Logo */}
                                         <div className="flex items-start justify-between mb-4">
                                             <div className="flex items-center gap-3">
-                                                <img
+                                                <CompanyLogo
                                                     src={company.logo}
+                                                    companyName={company.name}
                                                     alt={company.name}
-                                                    className="w-16 h-16 rounded-lg object-cover border-2 border-white shadow-md -mt-12"
+                                                    size="md"
+                                                    className="border-2 border-white shadow-md -mt-12"
                                                 />
                                                 <div className="flex-1">
                                                     <div className="flex items-center gap-2">
@@ -191,10 +194,11 @@ const CompaniesPage = () => {
                                     <Card key={company.id} padding="md" hover>
                                         <Link to={`/companies/${company.id}`}>
                                             <div className="flex items-start gap-4">
-                                                <img
+                                                <CompanyLogo
                                                     src={company.logo}
+                                                    companyName={company.name}
                                                     alt={company.name}
-                                                    className="w-20 h-20 rounded-lg object-cover"
+                                                    size="lg"
                                                 />
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2 mb-2">

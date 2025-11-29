@@ -4,6 +4,7 @@ import { useData } from '../../context/DataContext';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
+import CompanyLogo from '../../components/common/CompanyLogo';
 import { BookmarkX, MapPin, DollarSign, Clock, Briefcase } from 'lucide-react';
 
 const CandidateSavedJobsPage = () => {
@@ -63,10 +64,12 @@ const CandidateSavedJobsPage = () => {
                     {mySavedJobs.map(({ job, savedDate }) => (
                         <Card key={job.id} padding="md" hover>
                             <div className="flex items-start gap-4">
-                                <img
+                                <CompanyLogo
                                     src={job.employerLogo}
+                                    companyName={job.employerName}
                                     alt={job.employerName}
-                                    className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                                    size="md"
+                                    className="flex-shrink-0"
                                 />
 
                                 <div className="flex-1 min-w-0">
