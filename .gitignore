@@ -32,3 +32,6 @@ dist-ssr
 
 # Production
 build
+
+# Vercel
+.vercel
